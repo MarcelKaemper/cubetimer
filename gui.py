@@ -3,19 +3,37 @@ import serial
 import serial.tools.list_ports
 import tkinter
 import threading
-from tkinter import ttk
 
 def saveTime(timeCurr):
     with open("times.data", "a") as w:
         w.write(timeCurr+"\n")
 
+def loadTimes():
+    cbb.delete(0, tkinter.END)
+    for item in readTimes():
+        cbb.insert(tkinter.END, item)
 
-def readTime():
+
+def readTimes():
     times = []
     with open("times.data", "r") as r:
         for line in r.readlines():
             times.append(line)
     return times
+
+def deleteItem():
+    try:
+        toDelete = cbb.get(cbb.curselection())
+        print(cbb.get(cbb.curselection()))
+        with open("times.data", "r") as f:
+            lines = f.readlines()
+        with open("times.data", "w") as f:
+            for line in lines:
+                if line != toDelete:
+                    f.write(line)
+        loadTimes()
+    except:
+        pass
 
 
 def timer():
@@ -48,6 +66,9 @@ def timer():
     s.close()
 
 
+#####################
+### Layout
+#####################
 
 root = tkinter.Tk()
 root.geometry("500x500")
@@ -59,14 +80,15 @@ frame.pack()
 txt = tkinter.Entry(frame, bd=5, insertwidth=1, font=30)
 txt.pack()
 
-var = ""
+dele = tkinter.Button(frame, text="delete", command=deleteItem)
+dele.pack()
 
 cbb = tkinter.Listbox(frame) 
-for item in readTime():
-    cbb.insert(tkinter.END, item)
+loadTimes()
 cbb.pack()
 
 
 t = threading.Thread(target=timer, daemon=True)
 t.start()
+
 root.mainloop()
