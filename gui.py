@@ -11,7 +11,7 @@ def saveTime(timeCurr):
 def loadTimes():
     cbb.delete(0, tkinter.END)
     for item in readTimes():
-        cbb.insert(tkinter.END, item)
+        cbb.insert(0, item)
 
 
 def readTimes():
@@ -48,6 +48,7 @@ def timer():
 
         if ser == "tmr_start\r":
             timest = time.time()
+            txt.insert(tkinter.END, "Running!")
         elif ser == "tmr_stop\r":
             timeend = time.time()
 
@@ -58,6 +59,7 @@ def timer():
             txt.insert(0, timeCurr)
 
             saveTime(timeCurr)
+            loadTimes()
 
             timeCurr = ""
             timest = ""
@@ -71,7 +73,7 @@ def timer():
 #####################
 
 root = tkinter.Tk()
-root.geometry("500x500")
+# root.geometry("500x500")
 root.title("Cubetimer - GUI")
 
 frame = tkinter.Frame()
