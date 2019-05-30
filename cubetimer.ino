@@ -14,7 +14,7 @@ void setup() {
   pinMode(BTN1, INPUT);
   pinMode(BTN2, INPUT);
 
-  mgr.addListener(new EvtPinListener(BTN1, (EvtAction)down));
+  mgr.addListener(new EvtPinListener(BTN1,500, (EvtAction)down));
 }
 
 bool down(){
@@ -29,7 +29,7 @@ bool down(){
       Serial.println("tmr_stop");  
     }
     
-    beep();    
+    //beep();    
 
   }
   return true;
