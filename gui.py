@@ -3,11 +3,37 @@ import serial
 import serial.tools.list_ports
 import tkinter
 import threading
+import random
+
+def scramble():
+    x = ["R", "L", "U", "D", "F", "B"]
+    y = [" ", " ", " ", "'", "2"]
+
+    scr = ""
+
+    prev = ""
+
+    for i in range(0,12):
+        while 1:
+            pick = random.choice(x)
+            if pick != prev:
+                break
+
+        prev = pick
+        pick += random.choice(y)
+        scr += pick+" "
+        pick = ""
+
+    print(scr)
 
 def getAvg(n):
     sum = 0
     for i in range(0,n):
-        sum+=float(cbb.get(i).replace("\n", ""))
+        try:
+            sum+=float(cbb.get(i).replace("\n", ""))
+        except Exception:
+            return 0
+            
     return round(sum/n,4)
 
 
@@ -21,6 +47,7 @@ def loadTimes():
         cbb.insert(0, item)
     avg_three["text"] = "Avg. 3: "+str(getAvg(3))
     avg_five["text"] = "Avg. 5: "+str(getAvg(5))
+    scramble()
 
 
 def readTimes():
