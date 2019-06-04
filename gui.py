@@ -20,11 +20,17 @@ def scramble():
                 break
 
         prev = pick
-        pick += random.choice(y)
+        addition = random.choice(y)
+        if addition=="2":
+            temp = pick
+            pick = addition
+            pick += temp
+        else:
+            pick += addition
         scr += pick+" "
         pick = ""
 
-    print(scr)
+    scrambleTxt["text"] = scr
 
 def getAvg(n):
     sum = 0
@@ -47,6 +53,8 @@ def loadTimes():
         cbb.insert(0, item)
     avg_three["text"] = "Avg. 3: "+str(getAvg(3))
     avg_five["text"] = "Avg. 5: "+str(getAvg(5))
+    avg_twelve["text"] = "Avg. 12: "+str(getAvg(12))
+    avg_thirty["text"] = "Avg. 30: "+str(getAvg(30))
     scramble()
 
 
@@ -116,19 +124,28 @@ frame.pack()
 txt = tkinter.Entry(frame, bd=5, insertwidth=1, font=30)
 txt.pack()
 
+scrambleTxt = tkinter.Label(frame)
+scrambleTxt.pack()
+
 avg_three = tkinter.Label(frame)
 avg_three.pack()
 
 avg_five = tkinter.Label(frame)
 avg_five.pack()
 
+avg_twelve = tkinter.Label(frame)
+avg_twelve.pack()
+
+avg_thirty = tkinter.Label(frame)
+avg_thirty.pack()
+
 dele = tkinter.Button(frame, text="delete", command=deleteItem)
 dele.pack()
 
 cbb = tkinter.Listbox(frame) 
-loadTimes()
 cbb.pack()
 
+loadTimes()
 
 t = threading.Thread(target=timer, daemon=True)
 t.start()
