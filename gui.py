@@ -3,7 +3,24 @@ import serial
 import serial.tools.list_ports
 import tkinter
 import threading
+import tkinter.ttk as ttk
 import random
+
+def refreshAll():
+    ports = loadPorts()
+    loadTimes()
+    scramble()
+    port["values"] = ports
+    port.current(0)
+        
+
+
+def loadPorts():
+    ports = [] 
+    for p in serial.tools.list_ports.comports():
+        print(p[0])
+        ports.append(p[0])
+    return ports
 
 def scramble():
     x = ["R", "L", "U", "D", "F", "B"]
@@ -80,7 +97,8 @@ def deleteItem():
 
 
 def timer():
-    s = serial.Serial("COM9")
+    s = serial.Serial(port.get())
+    tmpFrame.destroy()
 
     timest = ""
     timeend = ""
@@ -109,6 +127,10 @@ def timer():
 
     s.close()
 
+def go():
+    t = threading.Thread(target=timer, daemon=True)
+    t.start()
+
 
 #####################
 ### Layout
@@ -116,10 +138,22 @@ def timer():
 
 root = tkinter.Tk()
 # root.geometry("500x500")
+
 root.title("Cubetimer - GUI")
+
+tmpFrame = tkinter.Frame()
+tmpFrame.pack(side=tkinter.TOP)
 
 frame = tkinter.Frame()
 frame.pack()
+
+btnFrame = tkinter.Frame()
+btnFrame.pack(side=tkinter.TOP)
+
+port = ttk.Combobox(tmpFrame)
+port.pack(side=tkinter.LEFT)
+startBtn = tkinter.Button(tmpFrame, text="Choose", command=go)
+startBtn.pack(side=tkinter.LEFT)
 
 txt = tkinter.Entry(frame, bd=5, insertwidth=1, font=30)
 txt.pack()
@@ -139,15 +173,14 @@ avg_twelve.pack()
 avg_thirty = tkinter.Label(frame)
 avg_thirty.pack()
 
-dele = tkinter.Button(frame, text="delete", command=deleteItem)
-dele.pack()
+refresh = tkinter.Button(btnFrame, text="Refresh", command=refreshAll)
+refresh.pack(side=tkinter.LEFT)
+dele = tkinter.Button(btnFrame, text="Delete", command=deleteItem)
+dele.pack(side=tkinter.LEFT)
 
 cbb = tkinter.Listbox(frame) 
 cbb.pack()
 
-loadTimes()
-
-t = threading.Thread(target=timer, daemon=True)
-t.start()
+refreshAll()
 
 root.mainloop()
