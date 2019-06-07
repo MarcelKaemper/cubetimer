@@ -151,9 +151,9 @@ btnFrame = tkinter.Frame()
 btnFrame.pack(side=tkinter.TOP)
 
 port = ttk.Combobox(tmpFrame)
-port.pack(side=tkinter.LEFT)
+port.pack(side=tkinter.LEFT, fill=tkinter.BOTH)
 startBtn = tkinter.Button(tmpFrame, text="Choose", command=go)
-startBtn.pack(side=tkinter.LEFT)
+startBtn.pack(side=tkinter.LEFT, fill=tkinter.BOTH)
 
 txt = tkinter.Entry(frame, bd=5, insertwidth=1, font=30)
 txt.pack()
