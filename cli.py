@@ -1,12 +1,13 @@
 import time
 import serial
 import serial.tools.list_ports
+import functions as core
 
-ports = list(serial.tools.list_ports.comports())
-for p in ports:
-    print(p)
+ports = core.loadPorts() 
+for i in range(len(ports)):
+    print("["+str(i+1)+"] "+ports[i])
 
-s = serial.Serial("COM9")
+s = serial.Serial(ports[int(input())-1])
 
 timest = ""
 timeend = ""
@@ -21,11 +22,12 @@ while 1:
             timeend = time.time()
 
         if timest != "" and timeend != "":
-            break
+            print("Time needed: ", round(timeend - timest, 4), " secs")
+            timest = ""
+            timeend = ""
         
     except KeyboardInterrupt:
         break
 
-print("Time needed: ", round(timeend - timest, 4), " secs")
 
 s.close()
