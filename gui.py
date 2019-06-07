@@ -1,53 +1,13 @@
 import time
 import serial
-import serial.tools.list_ports
 import tkinter
 import threading
 import tkinter.ttk as ttk
-import random
+import functions as core
 
 def refreshAll():
-    ports = loadPorts()
     loadTimes()
-    scramble()
-    port["values"] = ports
-    port.current(0)
-        
-
-
-def loadPorts():
-    ports = [] 
-    for p in serial.tools.list_ports.comports():
-        print(p[0])
-        ports.append(p[0])
-    return ports
-
-def scramble():
-    x = ["R", "L", "U", "D", "F", "B"]
-    y = [" ", " ", " ", "'", "2"]
-
-    scr = ""
-
-    prev = ""
-
-    for i in range(0,12):
-        while 1:
-            pick = random.choice(x)
-            if pick != prev:
-                break
-
-        prev = pick
-        addition = random.choice(y)
-        if addition=="2":
-            temp = pick
-            pick = addition
-            pick += temp
-        else:
-            pick += addition
-        scr += pick+" "
-        pick = ""
-
-    scrambleTxt["text"] = scr
+    scrambleTxt["text"] = core.scramble()
 
 def getAvg(n):
     sum = 0
@@ -59,28 +19,15 @@ def getAvg(n):
             
     return round(sum/n,4)
 
-
-def saveTime(timeCurr):
-    with open("times.data", "a") as w:
-        w.write(timeCurr+"\n")
-
 def loadTimes():
     cbb.delete(0, tkinter.END)
-    for item in readTimes():
+    for item in core.readTimes():
         cbb.insert(0, item)
     avg_three["text"] = "Avg. 3: "+str(getAvg(3))
     avg_five["text"] = "Avg. 5: "+str(getAvg(5))
     avg_twelve["text"] = "Avg. 12: "+str(getAvg(12))
     avg_thirty["text"] = "Avg. 30: "+str(getAvg(30))
-    scramble()
-
-
-def readTimes():
-    times = []
-    with open("times.data", "r") as r:
-        for line in r.readlines():
-            times.append(line)
-    return times
+    scrambleTxt["text"] = core.scramble()
 
 def deleteItem():
     try:
@@ -94,7 +41,6 @@ def deleteItem():
         loadTimes()
     except:
         pass
-
 
 def timer():
     s = serial.Serial(port.get())
@@ -118,7 +64,7 @@ def timer():
             txt.delete(0, tkinter.END)
             txt.insert(0, timeCurr)
 
-            saveTime(timeCurr)
+            core.saveTime(timeCurr)
             loadTimes()
 
             timeCurr = ""
@@ -152,6 +98,10 @@ btnFrame.pack(side=tkinter.TOP)
 
 port = ttk.Combobox(tmpFrame)
 port.pack(side=tkinter.LEFT, fill=tkinter.BOTH)
+ports = core.loadPorts()
+port["values"] = ports
+port.current(0)
+
 startBtn = tkinter.Button(tmpFrame, text="Choose", command=go)
 startBtn.pack(side=tkinter.LEFT, fill=tkinter.BOTH)
 
