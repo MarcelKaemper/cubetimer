@@ -1,6 +1,5 @@
 import time
 import serial
-import serial.tools.list_ports
 import functions as core
 
 ports = core.loadPorts() 
