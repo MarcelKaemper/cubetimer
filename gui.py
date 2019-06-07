@@ -65,7 +65,9 @@ def timer():
             txt.insert(0, timeCurr)
 
             core.saveTime(timeCurr)
-            loadTimes()
+            
+            cbb.insert(0, timeCurr)
+            # loadTimes()
 
             timeCurr = ""
             timest = ""
